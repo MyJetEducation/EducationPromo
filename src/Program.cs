@@ -1,7 +1,6 @@
-using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using EducationPromo.Postgres;
-using Microsoft.EntityFrameworkCore;
+using MyJetWallet.Sdk.Postgres;
 using Serilog;
 
 namespace EducationPromo
@@ -25,15 +24,13 @@ namespace EducationPromo
 
 			builder.Host
 				.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-				.UseSerilog((_, configuration) => configuration.WriteTo.Console())
-				.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.Register(_ =>
-					new DatabaseContext(new DbContextOptionsBuilder<DatabaseContext>().UseNpgsql(connectionString).Options)));
+				.UseSerilog((_, configuration) => configuration.WriteTo.Console());
 
-			builder.Services.AddRazorPages();
+			IServiceCollection services = builder.Services;
+			services.AddRazorPages();
+			services.AddDatabase(DatabaseContext.Schema, connectionString, options => new DatabaseContext(options));
 
 			WebApplication app = builder.Build();
-
-			app.Services.GetService<DatabaseContext>()?.Database.Migrate();
 
 			app.UseDefaultFiles();
 			app.UseStaticFiles();

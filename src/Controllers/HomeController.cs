@@ -11,10 +11,10 @@ namespace EducationPromo.Controllers
 		private readonly ILogger<HomeController> _logger;
 		private readonly DatabaseContext _databaseContext;
 
-		public HomeController(ILogger<HomeController> logger, DatabaseContext databaseContext)
+		public HomeController(ILogger<HomeController> logger, DbContextOptionsBuilder<DatabaseContext> dbContextOptionsBuilder)
 		{
 			_logger = logger;
-			_databaseContext = databaseContext;
+			_databaseContext = new DatabaseContext(dbContextOptionsBuilder.Options);
 		}
 
 		[Route("add")]

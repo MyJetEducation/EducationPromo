@@ -1,10 +1,11 @@
-﻿using EducationPromo.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EducationPromo.Postgres
 {
 	public class DatabaseContext : DbContext
 	{
+		public const string Schema = "education";
+
 		public DbSet<EmailEntity> Entities { get; set; }
 
 		public DatabaseContext(DbContextOptions options) : base(options)
@@ -13,7 +14,7 @@ namespace EducationPromo.Postgres
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.HasDefaultSchema("education");
+			modelBuilder.HasDefaultSchema(Schema);
 
 			modelBuilder.Entity<EmailEntity>().ToTable("promo_emails");
 			modelBuilder.Entity<EmailEntity>().HasKey(e => e.Id);
