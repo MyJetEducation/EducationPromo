@@ -7,16 +7,22 @@ namespace EducationPromo
 {
 	public class Program
 	{
+		private const string ConnectionstringParamName = "CONNECTIONSTRING";
+
 		public static void Main(string[] args)
 		{
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 			builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
+			string postgresConnectionString = Environment.GetEnvironmentVariable(ConnectionstringParamName);
+			if (string.IsNullOrWhiteSpace(postgresConnectionString))
+				throw new ArgumentException($"Error! Environment variable \"{ConnectionstringParamName}\" not set.");
+
 			builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 				containerBuilder.Register(_ =>
 				{
-					var databaseContext = new DatabaseContext(new DbContextOptionsBuilder<DatabaseContext>().UseNpgsql(builder.Configuration["PostgresConnectionString"]).Options);
+					var databaseContext = new DatabaseContext(new DbContextOptionsBuilder<DatabaseContext>().UseNpgsql(postgresConnectionString).Options);
 					databaseContext.Database.Migrate();
 					return databaseContext;
 				}));
@@ -32,9 +38,7 @@ namespace EducationPromo
 			app.UseStaticFiles();
 			app.UseRouting();
 			app.MapControllers();
-			app.UseEndpoints(endpoints => {
-				endpoints.MapControllers();
-			});
+			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 			app.Run();
 		}
