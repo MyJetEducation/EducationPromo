@@ -30,12 +30,22 @@ namespace EducationPromo
 			services.AddRazorPages();
 			services.AddDatabase(DatabaseContext.Schema, connectionString, options => new DatabaseContext(options));
 
+			services.AddCors(options =>
+			{
+				options.AddPolicy("CorsApi",
+					policyBuilder => policyBuilder.WithOrigins("http://localhost:3000", "http://localhost")
+						.AllowAnyHeader()
+						.AllowAnyMethod());
+			});
+
 			WebApplication app = builder.Build();
 
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
-			app.MapControllers();
+			app.UseForwardedHeaders();
 			app.UseRouting();
+			app.UseCors("CorsApi"); //TODO: temporary
+			app.MapControllers();
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapRazorPages();

@@ -1,10 +1,13 @@
 ﻿using EducationPromo.Models;
 using EducationPromo.Postgres;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationPromo.Controllers
 {
+	[ApiController]
+	[EnableCors("CorsApi")]
 	[Route("/api/home")]
 	public class HomeController : ControllerBase
 	{
@@ -19,6 +22,8 @@ namespace EducationPromo.Controllers
 
 		[Route("add")]
 		[HttpPost]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> Add([FromBody] EmailRequest request)
 		{
 			if (!ModelState.IsValid)
