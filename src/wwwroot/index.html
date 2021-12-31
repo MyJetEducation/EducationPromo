@@ -1,0 +1,31 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <script>
+        function send() {
+            $.ajax({
+                url: '/api/home/add',
+                type: 'POST',
+                data: JSON.stringify({ email: $("#email").val() }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function(msg) {
+                    console.log(msg);
+                    $("#result").html(msg);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<form id="sendForm" action="">
+    <input type="text" id="email" value="123"/>
+    <input type="button" onclick="send();" value="send"/>
+</form>
+
+<span id="result"></span>
+
+</body>
+</html>

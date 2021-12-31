@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EducationPromo.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace EducationPromo
+namespace EducationPromo.Postgres
 {
 	public class DatabaseContext : DbContext
 	{

@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using EducationPromo.Postgres;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationPromo
@@ -27,10 +28,14 @@ namespace EducationPromo
 			if (!app.Environment.IsDevelopment())
 				app.UseExceptionHandler("/Error");
 
+			app.UseDefaultFiles();
 			app.UseStaticFiles();
 			app.UseRouting();
-			app.UseAuthorization();
-			app.MapRazorPages();
+			app.MapControllers();
+			app.UseEndpoints(endpoints => {
+				endpoints.MapControllers();
+			});
+
 			app.Run();
 		}
 	}

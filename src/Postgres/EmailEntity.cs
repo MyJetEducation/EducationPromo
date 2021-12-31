@@ -1,4 +1,4 @@
-﻿namespace EducationPromo
+﻿namespace EducationPromo.Postgres
 {
 	public class EmailEntity
 	{
